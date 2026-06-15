@@ -73,7 +73,7 @@ const $=id=>document.getElementById(id);
 const S={authed:false,kod:"",sifre:"",data:null,loading:false,tab:"ozet",ekstre:null,sheet:null,sheetData:null,busy:false,err:"",q:""};
 const money=(n,c)=>(c||"$")+Math.round(Number(n)||0).toLocaleString("tr-TR");
 const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[m]));
-const P={grid:"M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z",wallet:"M3 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2H5a2 2 0 0 0-2 2zM3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM16 12.5h3v3h-3a1.5 1.5 0 0 1 0-3z",check:"M20 6 9 17l-5-5",receipt:"M5 3v18l2-1.5L9 21l2-1.5L13 21l2-1.5L17 21l2-1.5V3l-2 1.5L15 3l-2 1.5L11 3 9 4.5 7 3zM8 8h8M8 12h8",cash:"M2 6h20v12H2zM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6M6 9v.01M18 15v.01",minus:"M5 12h14",users:"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75",clock:"M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM12 7v5l3.5 2",logout:"M16 17l5-5-5-5M21 12H9M12 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h6",x:"M18 6 6 18M6 6l12 12",wrench:"M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z",alert:"M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z",plus:"M12 5v14M5 12h14",cal:"M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3H4zM4 9h16v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM8 3v3M16 3v3",doc:"M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9zM14 3v6h6",refresh:"M21 12a9 9 0 1 1-2.6-6.3M21 4v5h-5",cl:"m15 6-6 6 6 6",phone:"M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.1a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z",bank:"M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"};
+const P={grid:"M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z",wallet:"M3 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2H5a2 2 0 0 0-2 2zM3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM16 12.5h3v3h-3a1.5 1.5 0 0 1 0-3z",check:"M20 6 9 17l-5-5",receipt:"M5 3v18l2-1.5L9 21l2-1.5L13 21l2-1.5L17 21l2-1.5V3l-2 1.5L15 3l-2 1.5L11 3 9 4.5 7 3zM8 8h8M8 12h8",cash:"M2 6h20v12H2zM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6M6 9v.01M18 15v.01",minus:"M5 12h14",users:"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75",clock:"M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM12 7v5l3.5 2",logout:"M16 17l5-5-5-5M21 12H9M12 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h6",x:"M18 6 6 18M6 6l12 12",wrench:"M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z",alert:"M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z",plus:"M12 5v14M5 12h14",cal:"M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3H4zM4 9h16v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM8 3v3M16 3v3",doc:"M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9zM14 3v6h6",refresh:"M21 12a9 9 0 1 1-2.6-6.3M21 4v5h-5",cl:"m15 6-6 6 6 6",phone:"M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.1a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z",bank:"M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3",chart:"M3 3v18h18M7 15l4-5 3 3 5-7"};
 function ic(n,s,c){const d=P[n];if(!d)return"";return '<i class="ic"><svg width="'+(s||16)+'" height="'+(s||16)+'" viewBox="0 0 24 24" fill="none" stroke="'+(c||'#fff')+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+d.split('M').filter(Boolean).map(p=>'<path d="M'+p+'"/>').join('')+'</svg></i>';}
 function toast(m){const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2600);}
 function initials(s){s=String(s||"").trim();if(!s)return"P";const p=s.split(/\s+/);return (p[0][0]+(p[1]?p[1][0]:"")).toUpperCase();}
@@ -95,15 +95,15 @@ async function reload(){ S.loading=true;render(); try{const res=await api("data"
 async function act(action,extra,okMsg){ if(S.busy)return; S.busy=true; try{ const res=await api(action,extra); if(res&&res.ok){ if(okMsg)toast(okMsg); const r=await api("data"); if(r&&r.ok)S.data=r; } else toast((res&&res.error)||"İşlem başarısız"); }catch(e){ toast("Bağlantı hatası"); } S.busy=false; render(); }
 function logout(){ try{localStorage.removeItem("pp_kod");localStorage.removeItem("pp_sifre");}catch(e){} S.authed=false;S.data=null;S.kod="";S.sifre="";render(); }
 
-const TABS=[["ozet","Özet","grid"],["musteriler","Müşteriler & Bakiye","users"],["odeme","Ödeme Onayları","check"],["geciken","Geciken Ödemeler","alert"],["istanbul","İstanbul Şube","doc"],["cek","Çekler","bank"],["servis","Servis Talepleri","wrench"]];
-const TITLE={ozet:["Özet","Tüm operasyon tek bakışta"],musteriler:["Müşteriler & Bakiye","Cari bakiyeler (salt-okunur)"],odeme:["Ödeme Onayları","Portaldan gelen ödeme bildirimleri"],geciken:["Geciken Ödemeler","Vadesi geçmiş taksitler"],istanbul:["İstanbul Şube","Ali'nin masraf & tahsilatları — onayınıza düşer"],cek:["Çekler","Çek portföyü ve vade takibi"],servis:["Servis Talepleri","Müşteri portalından gelen arızalar"]};
+const TABS=[["ozet","Özet","grid"],["plan","Tahsilat Planı","chart"],["musteriler","Müşteriler & Bakiye","users"],["odeme","Ödeme Onayları","check"],["geciken","Geciken Ödemeler","alert"],["istanbul","İstanbul Şube","doc"],["cek","Çekler","bank"],["servis","Servis Talepleri","wrench"]];
+const TITLE={ozet:["Özet","Tüm operasyon tek bakışta"],plan:["Tahsilat Planı","Önümüzdeki 30 / 60 / 90 günde tahsil edilecek alacaklar"],musteriler:["Müşteriler & Bakiye","Cari bakiyeler (salt-okunur)"],odeme:["Ödeme Onayları","Portaldan gelen ödeme bildirimleri"],geciken:["Geciken Ödemeler","Vadesi geçmiş taksitler"],istanbul:["İstanbul Şube","Ali'nin masraf & tahsilatları — onayınıza düşer"],cek:["Çekler","Çek portföyü ve vade takibi"],servis:["Servis Talepleri","Müşteri portalından gelen arızalar"]};
 function badgeOf(t){const o=(S.data&&S.data.ozet)||{};if(t==="odeme"&&o.bekleyenOnay)return[o.bekleyenOnay,"#F5A623","#111"];if(t==="geciken"&&o.gecikenAdet)return[o.gecikenAdet,"#C51515","#fff"];if(t==="istanbul"&&o.istBekleyen)return[o.istBekleyen,"#F5A623","#111"];if(t==="servis"&&o.acikServis)return[o.acikServis,"#5B8DEF","#fff"];if(t==="cek"&&o.yaklasanCek)return[o.yaklasanCek,"#5B8DEF","#fff"];return null;}
 
 function render(){
   if(!S.authed){renderLogin();return;}
   const d=S.data||{}, p=d.personel||"Personel";
   const nav=TABS.map(t=>{const on=S.tab===t[0];const b=badgeOf(t[0]);return '<div class="ni'+(on?' on':'')+'" data-tab="'+t[0]+'">'+ic(t[2],16,on?'#fff':'#bdbdbd')+' <span>'+t[1]+'</span>'+(b?'<span class="bd" style="background:'+b[1]+';color:'+b[2]+';">'+b[0]+'</span>':'')+'</div>';}).join('');
-  const bnav=[["ozet","Özet","grid"],["geciken","Geciken","alert"],["odeme","Onay","check"],["istanbul","Şube","doc"],["cek","Çek","bank"]].map(t=>{const on=S.tab===t[0];return '<div class="bn'+(on?' on':'')+'" data-tab="'+t[0]+'">'+ic(t[2],19,on?'#fff':'#8A8A8A')+' '+t[1]+'</div>';}).join('');
+  const bnav=[["ozet","Özet","grid"],["plan","Plan","chart"],["geciken","Geciken","alert"],["odeme","Onay","check"],["istanbul","Şube","doc"]].map(t=>{const on=S.tab===t[0];return '<div class="bn'+(on?' on':'')+'" data-tab="'+t[0]+'">'+ic(t[2],19,on?'#fff':'#8A8A8A')+' '+t[1]+'</div>';}).join('');
   const tt=TITLE[S.tab]||["",""];
   let body = S.loading ? '<div class="empty" style="padding-top:80px;">'+ic('refresh',26,'#5A5A5A')+'<div style="margin-top:8px;">Yükleniyor…</div></div>' : viewFor();
   $("root").innerHTML=
@@ -134,6 +134,7 @@ function viewFor(){
   if(S.ekstre) return ekstreView();
   switch(S.tab){
     case "ozet": return ozetView();
+    case "plan": return planView();
     case "musteriler": return musterilerView();
     case "odeme": return odemeView();
     case "geciken": return gecikenView();
@@ -141,6 +142,39 @@ function viewFor(){
     case "cek": return cekView();
     case "servis": return servisView();
   } return "";
+}
+function kshort(n){ n=Math.round(Number(n)||0); if(Math.abs(n)>=1000) return "$"+(n/1000).toFixed(Math.abs(n)>=10000?0:1).replace(".",",")+"B"; return "$"+n; }
+function agingBars(a){
+  const items=[["Gecikmiş",a.gecikmis||0,"#C51515"],["0-30 gün",a.d30||0,"#F5A623"],["31-60 gün",a.d60||0,"#5B8DEF"],["61-90 gün",a.d90||0,"#2ED573"],["90+ gün",a.ileri||0,"#9B7BFF"]];
+  const max=Math.max(1,...items.map(i=>i[1]));
+  const W=640,H=250,padB=48,padT=30,padL=12,padR=12; const bw=(W-padL-padR)/items.length;
+  let g="";
+  // yatay kılavuz çizgileri
+  for(let k=1;k<=3;k++){ const y=padT+(H-padT-padB)*(k/3); g+='<line x1="'+padL+'" y1="'+y+'" x2="'+(W-padR)+'" y2="'+y+'" stroke="#1f1f1f"/>'; }
+  items.forEach((it,i)=>{ const h=(it[1]/max)*(H-padT-padB); const x=padL+i*bw+bw*0.2; const w=bw*0.6; const y=H-padB-h;
+    g+='<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+Math.max(h,3)+'" rx="7" fill="'+it[2]+'"/>';
+    g+='<text x="'+(x+w/2)+'" y="'+(y-8)+'" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="800">'+money(it[1])+'</text>';
+    g+='<text x="'+(x+w/2)+'" y="'+(H-padB+19)+'" text-anchor="middle" fill="#9a9a9a" font-size="11.5">'+it[0]+'</text>';
+  });
+  g+='<line x1="'+padL+'" y1="'+(H-padB)+'" x2="'+(W-padR)+'" y2="'+(H-padB)+'" stroke="#2e2e2e" stroke-width="1.5"/>';
+  return '<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="display:block;">'+g+'</svg>';
+}
+function planView(){
+  const d=S.data||{}, a=d.aging||{gecikmis:0,d30:0,d60:0,d90:0,ileri:0};
+  const ic30=(a.gecikmis||0)+(a.d30||0), ic60=ic30+(a.d60||0), ic90=ic60+(a.d90||0);
+  const toplam=ic90+(a.ileri||0);
+  const card=(t,v,x,c)=>'<div class="kpi" style="border-color:'+c+'33;"><div class="t">'+t+'</div><div class="v" style="color:'+c+';">'+money(v)+'</div><div class="x">'+x+'</div></div>';
+  const cards='<div class="kpis" style="grid-template-columns:repeat(4,1fr);">'
+   +card("30 GÜN İÇİNDE",ic30,"gecikmiş dahil","#F5A623")
+   +card("60 GÜN İÇİNDE",ic60,"kümülatif","#5B8DEF")
+   +card("90 GÜN İÇİNDE",ic90,"kümülatif","#2ED573")
+   +card("TOPLAM AÇIK ALACAK",toplam,"tüm vadeler","#fff")+'</div>';
+  const kl=(d.agingKalemler||[]);
+  const rows=kl.map(k=>{const gec=k.gun<0;return '<div class="row"><div style="width:60px;"><span class="pill '+(k.kaynak==="Çek"?"p-b":"p-o")+'">'+esc(k.kaynak)+'</span></div><div class="grow"><div style="font-weight:700;" class="nowrap">'+esc(k.musteri)+'</div><div style="font-size:11px;color:'+(gec?"#FF6B5E":"var(--muted)")+';">vade '+esc(k.vade)+' · '+(gec?(Math.abs(k.gun)+" gün geçti"):(k.gun+" gün kaldı"))+'</div></div><div class="mono" style="font-weight:700;color:'+(gec?"#FF6B5E":"#fff")+';">'+money(k.tutar)+'</div></div>';}).join('')||'<div class="empty">Vadeli alacak (taksit/çek) bulunmuyor.</div>';
+  return cards
+   +'<div class="sec">'+ic('chart',13,'#8A8A8A')+'VADE DAĞILIMI (taksit + çek)</div><div class="box" style="padding:16px 14px 8px;">'+agingBars(a)+'</div>'
+   +'<div style="font-size:11.5px;color:var(--muted);margin-top:10px;line-height:1.5;">Bu plan, ödenmemiş <b>taksitler</b> ve aktif <b>çek</b> vadelerinden hesaplanır. Gecikmişler ilk sütunda; sağa gittikçe ileri vadeler. Nakit akışınızı buna göre planlayın.</div>'
+   +'<div class="sec">VADE SIRASIYLA KALEMLER</div><div class="box">'+rows+'</div>';
 }
 function ozetView(){
   const d=S.data||{}, o=d.ozet||{};
@@ -158,7 +192,13 @@ function ozetView(){
   const onayBox=onay.length?onay.map(b=>'<div class="row"><div class="grow"><div style="font-weight:700;" class="nowrap">'+esc(b.musteri)+'</div><div style="font-size:11px;color:var(--muted);">'+esc(b.tarih||b.zaman)+' · '+esc(b.yontem)+'</div></div><div class="mono" style="font-weight:700;">'+money(b.tutar,b.pb==="TL"?"₺":"$")+'</div><button class="btn b-on" data-act="odemeOnay" data-row="'+b._row+'" data-durum="Onaylandı">'+ic('check',12,'#5fd08a')+'</button><button class="btn b-no" data-act="odemeOnay" data-row="'+b._row+'" data-durum="Reddedildi">'+ic('x',12,'#FF6B5E')+'</button></div>').join(''):'<div class="empty">Bekleyen onay yok 👍</div>';
   const gec=(d.gecikenler||[]).slice(0,5).map(g=>'<div class="row"><div class="grow"><div style="font-weight:700;" class="nowrap">'+esc(g.musteri)+'</div><div style="font-size:11px;color:var(--muted);">vade '+esc(g.vade)+'</div></div><div style="text-align:right;"><div class="mono" style="font-weight:700;color:#FF6B5E;">'+money(g.tutar)+'</div><span class="pill p-r">'+g.gun+' gün</span></div></div>').join('')||'<div class="empty">Geciken ödeme yok.</div>';
   const serv=(d.servisler||[]).filter(s=>s.durum!=="Çözüldü"&&s.durum!=="Reddedildi").slice(0,5).map(s=>'<div class="row"><div class="grow"><div style="font-weight:700;" class="nowrap">'+esc(s.musteri)+'</div><div style="font-size:11px;color:var(--muted);" class="nowrap">'+esc(s.makine)+' · '+esc(s.sorun)+'</div></div>'+durumPill(s.durum)+'</div>').join('')||'<div class="empty">Açık servis yok.</div>';
+  const a=d.aging||{gecikmis:0,d30:0,d60:0,d90:0,ileri:0};
+  const ic30=(a.gecikmis||0)+(a.d30||0), ic60=ic30+(a.d60||0), ic90=ic60+(a.d90||0);
+  const fig=(t,v,c)=>'<div style="flex:1;"><div style="font-size:10px;color:var(--muted);">'+t+'</div><div class="mono" style="font-size:17px;font-weight:800;color:'+c+';margin-top:3px;">'+money(v)+'</div></div>';
+  const plan='<div class="sec">'+ic('chart',13,'#8A8A8A')+'TAHSİLAT PLANI · gelecek alacaklar <span style="margin-left:auto;font-weight:600;color:#7FA6F0;cursor:pointer;" data-tab="plan">detay ›</span></div>'
+   +'<div class="box" style="padding:15px;"><div style="display:flex;gap:14px;">'+fig("30 GÜN İÇİNDE",ic30,"#F5A623")+fig("60 GÜN İÇİNDE",ic60,"#5B8DEF")+fig("90 GÜN İÇİNDE",ic90,"#2ED573")+'</div><div style="margin-top:12px;">'+agingBars(a)+'</div></div>';
   return k
+   +plan
    +'<div class="sec">'+ic('check',13,'#8A8A8A')+'BEKLEYEN ÖDEME ONAYLARI</div><div class="box">'+onayBox+'</div>'
    +'<div class="sec">'+ic('alert',13,'#FF6B5E')+'GECİKEN ÖDEMELER</div><div class="box">'+gec+'</div>'
    +'<div class="sec">'+ic('wrench',13,'#8A8A8A')+'AÇIK SERVİS TALEPLERİ</div><div class="box">'+serv+'</div>';
