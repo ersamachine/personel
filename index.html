@@ -88,7 +88,7 @@ async function login(){
   const k=$("lkod").value.trim(), s=$("lsifre").value.trim();
   if(!k||!s){S.err="Kod ve şifre girin.";render();return;}
   S.kod=k;S.sifre=s;S.busy=true;S.err="";renderLogin();
-  try{ const res=await api("data"); if(res&&res.ok){ S.authed=true;S.data=res; if($("lrem")&&$("lrem").checked){try{localStorage.setItem("pp_kod",k);localStorage.setItem("pp_sifre",s);}catch(e){}} render(); }
+  try{ const res=await api("data"); if(res&&res.ok){ S.authed=true;S.data=res;S.busy=false; if($("lrem")&&$("lrem").checked){try{localStorage.setItem("pp_kod",k);localStorage.setItem("pp_sifre",s);}catch(e){}} render(); }
     else { S.busy=false;S.err=(res&&res.error)||"Giriş başarısız.";renderLogin(); } }
   catch(e){ S.busy=false;S.err="Bağlantı hatası.";renderLogin(); }
 }
@@ -436,7 +436,7 @@ document.addEventListener("click",async e=>{
   if(a==="tahsilat"){S.sheet="tahsilat";S.sheetData={};render();return;}
   if(a==="tahsilatPre"){S.sheet="tahsilat";S.sheetData={musteri:el.getAttribute("data-musteri"),tutar:el.getAttribute("data-tutar")};render();return;}
   if(a==="gecikenEkleAc"){S.sheet="gecikenEkle";S.sheetData={};render();return;}
-  if(a==="gecikenKaydet"){const m=$("gc_mus").value;if(!m){toast("Müşteri seç");return;}const not=$("gc_not")?$("gc_not").value:"";S.sheet=null;S.sheetData=null;act("gecikenEkle",{data:{musteri:m,not:not}},"Geciken'e eklendi");return;}
+  if(a==="gecikenKaydet"){const m=$("gc_mus").value;if(!m){toast("Müşteri seç");return;}const not=$("gc_not")?$("gc_not").value:"";S.sheet=null;S.sheetData=null;act("gecikenEkle",{data:{musteri:m,not:not}},"Geciken müşteri eklendi ✓");return;}
   if(a==="gecikenKaldir"){act("gecikenKaldir",{row:el.getAttribute("data-row")},"Kaldırıldı");return;}
   if(a==="sheetclose"){S.sheet=null;S.sheetData=null;render();return;}
   if(a==="tahsilatKaydet"){const data={musteri:$("t_mus").value,tutar:$("t_tut").value,tarih:$("t_tar").value,yontem:$("t_yon").value,aciklama:$("t_ack").value};if(!data.musteri||!(parseFloat(data.tutar)>0)){toast("Müşteri ve tutar gerekli");return;}S.sheet=null;S.sheetData=null;act("tahsilatGir",{data:data},"Tahsilat kaydedildi");return;}
