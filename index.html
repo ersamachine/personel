@@ -196,7 +196,7 @@ function ozetView(){
    +kpi("GECİKEN ÖDEME",money(o.gecikenTutar),(o.gecikenAdet||0)+" müşteri · vadesi geçti","alert","#FF6B5E",true)
    +kpi("BUGÜN TAHSİLAT",money(o.bugunTahsilat),"","cash","#5B8DEF")
    +kpi("ŞUBE ONAYI",(o.istBekleyen||0),"Ali'den bekleyen","doc","#F5A623")
-   +kpi("BUGÜN MASRAF",money(o.bugunMasraf),"İstanbul şube","minus","#9B7BFF")
+   +kpi("BUGÜN MASRAF",money(o.bugunMasraf,"₺"),"İstanbul şube","minus","#9B7BFF")
    +kpi("AÇIK SERVİS",(o.acikServis||0),"","wrench","#2ED573")
    +kpi("YAKLAŞAN ÇEK",(o.yaklasanCek||0),"7 gün içinde · "+money(o.cekToplam),"bank","#5B8DEF")
    +'</div>';
