@@ -473,9 +473,6 @@ function sheetOvl(){
      +'<button class="btnred" data-act="gecikenKaydet" style="margin-top:16px;" '+(S.busy?'disabled':'')+'>'+ic('plus',16,'#fff')+' Geciken\'e Ekle</button>'
      +'<div style="font-size:11px;color:var(--muted);margin-top:8px;">Sadece bakiyesi olan müşteriler listelenir. Eklenince Geciken Ödemeler\'de \"Bakiye\" etiketiyle görünür.</div></div></div>';
   }
-  if(S.sheet!=="tahsilat") return "";
-  const pre=S.sheetData||{};
-  const today=new Date().toISOString().slice(0,10);
   if(S.sheet==="ekstrePdf"){
     const e=S.ekstre||{}; const on=S.ekstreTk!==false;
     return '<div class="ovl"><div class="modal" data-stop="1"><div class="mh"><div class="t">Cari Ekstre</div><div style="cursor:pointer;" data-act="sheetclose">'+ic('x',20,'#999')+'</div></div>'
@@ -486,6 +483,9 @@ function sheetOvl(){
      +'</div>'
      +'<button class="btnred" data-act="ekstrePdfYap" style="margin-top:16px;">'+ic('doc',16,'#fff')+' PDF oluştur</button></div></div>';
   }
+  if(S.sheet!=="tahsilat") return "";
+  const pre=S.sheetData||{};
+  const today=new Date().toISOString().slice(0,10);
   return '<div class="ovl"><div class="modal" data-stop="1"><div class="mh"><div class="t">Tahsilat Girişi</div><div style="cursor:pointer;" data-act="sheetclose">'+ic('x',20,'#999')+'</div></div>'
    +'<div style="font-size:11.5px;color:var(--muted);margin-bottom:12px;">"Ödemeler" sayfasına işlenir → cari bakiye düşer.</div>'
    +'<label class="lbl">Müşteri</label><input id="t_mus" class="field" value="'+esc(pre.musteri||"")+'" placeholder="Müşteri adı (cariyle aynı)">'
