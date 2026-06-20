@@ -190,7 +190,7 @@ function renderLogin(){
 }
 
 function kpi(t,v,x,i,c,al){return '<div class="kpi'+(al?' alert':'')+'"><div class="t">'+ic(i,12,c)+' '+t+'</div><div class="v" style="color:'+c+';">'+v+'</div>'+(x?'<div class="x">'+x+'</div>':'')+'</div>';}
-function durumPill(d){const m={"Onaylandı":"p-g","Onay Bekliyor":"p-o","Yeni":"p-o","Reddedildi":"p-r","İşlemde":"p-b","Çözüldü":"p-g","Portföyde":"p-o","Tahsilde":"p-b","Tahsil Edildi":"p-g","Karşılıksız":"p-r","İade":"p-r","Ödendi":"p-g","Kısmi":"p-b"};return '<span class="pill '+(m[d]||"p-o")+'">'+esc(d)+'</span>';}
+function durumPill(d){const m={"Onaylandı":"p-g","Onay Bekliyor":"p-o","Yeni":"p-o","Reddedildi":"p-r","İşlemde":"p-b","Çözüldü":"p-g","Portföyde":"p-o","Tahsilde":"p-b","Tahsil Edildi":"p-g","Çıkış Yapıldı":"p-m","Karşılıksız":"p-r","İade":"p-r","Ödendi":"p-g","Kısmi":"p-b"};return '<span class="pill '+(m[d]||"p-o")+'">'+esc(d)+'</span>';}
 
 function viewFor(){
   if(S.ekstre) return ekstreView();
@@ -901,7 +901,7 @@ document.addEventListener("click",async e=>{
   if(a==="stokSil"){const row=el.getAttribute("data-row");if(!confirm("Bu stok kaydı silinsin mi?"))return;act("stokSil",{row:row},"Stok silindi");return;}
   if(a==="fotoBuyut"){S.sheet="foto";S.sheetData={url:el.getAttribute("data-url"),title:el.getAttribute("data-title")};render();return;}
   if(a==="cekDetayAc"){const i=+el.getAttribute("data-i");const c=((S.data||{}).cekler||[])[i]||{};window.cekPhotos=[];S.sheet="cekDetay";S.sheetData=c;render();return;}
-  if(a==="cekKaydet"){const row=el.getAttribute("data-row");const durum=$("ck_durum").value;const yer=$("ck_yer").value.trim();const verilis=$("ck_veris").value;if(durum==="Çıkış Yapıldı"&&!yer){toast("Çıkış için 'nereye verildi' yazın");return;}S.sheet=null;S.sheetData=null;act("cekGuncelle",{row:row,durum:durum,yer:yer,verilis:verilis,photos:(window.cekPhotos||[]).slice()},"Çek güncellendi");window.cekPhotos=[];return;}
+  if(a==="cekKaydet"){const row=el.getAttribute("data-row");let durum=$("ck_durum").value;const yer=$("ck_yer").value.trim();const verilis=$("ck_veris").value;if(yer&&(durum==="Portföyde"))durum="Çıkış Yapıldı";if(durum==="Çıkış Yapıldı"&&!yer){toast("Çıkış için 'nereye verildi' yazın");return;}S.sheet=null;S.sheetData=null;act("cekGuncelle",{row:row,durum:durum,yer:yer,verilis:verilis,photos:(window.cekPhotos||[]).slice()},"Çek güncellendi");window.cekPhotos=[];return;}
   if(a==="teklifYanitAc"){const i=+el.getAttribute("data-i");const t=((S.data||{}).teklifler||[])[i]||{};S.sheet="teklifYanit";S.sheetData={row:t._row,musteri:t.musteri,urun:t.urun,adet:t.adet,aciklama:t.aciklama,yanit:t.yanit};render();return;}
   if(a==="teklifYanitKaydet"){const txt=$("ty_txt").value.trim();if(!txt){toast("Yanıt yazın");return;}const row=el.getAttribute("data-row");S.sheet=null;S.sheetData=null;act("teklifYanitla",{row:row,yanit:txt},"Teklif yanıtlandı");return;}
   if(a==="sifreYanitAc"){const i=+el.getAttribute("data-i");const t=((S.data||{}).sifreler||[])[i]||{};S.sheet="sifreYanit";S.sheetData={row:t._row,musteri:t.musteri,makine:t.makine,sifre:t.sifre};render();return;}
