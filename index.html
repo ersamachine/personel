@@ -320,7 +320,24 @@ function ozetView(){
   const gec=(d.gecikenler||[]).slice(0,5).map(g=>'<div class="row"><div class="grow"><div class="nm2 nowrap">'+esc(g.musteri)+'</div><div class="sub">'+(g.kaynak==="Bakiye"?"Bakiye · taksit dışı":"vade "+esc(g.vade))+'</div></div><div style="text-align:right;"><div class="mono nm2" style="color:#EA5455;">'+money(g.tutar)+'</div>'+(g.gun!=null?'<span class="pill p-r">'+g.gun+' gün</span>':'<span class="pill p-b">Bakiye</span>')+'</div></div>').join('')||'<div class="empty">Geciken ödeme yok.</div>';
   // Servis SLA
   const serv=(d.servisler||[]).filter(s=>s.durum!=="Çözüldü"&&s.durum!=="Reddedildi").slice(0,5).map(s=>{const dy=daysOpen(s.zaman||s.tarih);const sla=(dy!=null)?(dy>3?'<span class="pill p-r">SLA · '+dy+'g</span>':(dy>=2?'<span class="pill p-o">'+dy+'g</span>':'<span class="pill p-g">'+dy+'g</span>')):durumPill(s.durum);return '<div class="row"><div class="grow"><div class="nm2 nowrap">'+esc(s.musteri)+'</div><div class="sub nowrap">'+esc(s.makine)+' · '+esc(s.sorun)+'</div></div>'+sla+'</div>';}).join('')||'<div class="empty">Açık servis yok.</div>';
-  return k+strip+today
+  // TOPLAM CİRO (tam genişlik kart + tahsil edilen / kalan çubuğu)
+  const _ciro=o.ciro||0, _tahsil=o.tahsilEdilen||0; const _kalan=Math.max(0,_ciro-_tahsil); const _pct=_ciro>0?Math.max(0,Math.min(100,_tahsil/_ciro*100)):0;
+  const ciroCard='<div class="box" style="padding:18px 20px;margin-bottom:14px;border:1px solid var(--line);">'
+   +'<div style="display:flex;align-items:center;gap:14px;">'
+     +'<div style="width:46px;height:46px;border-radius:12px;background:var(--red-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0;">'+ic("cash",24,"#981224")+'</div>'
+     +'<div style="min-width:0;"><div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.6px;">TOPLAM CİRO</div>'
+       +'<div class="mono" style="font-size:29px;font-weight:800;color:var(--head);line-height:1.12;">'+money(_ciro)+'</div>'
+       +'<div style="font-size:11.5px;color:var(--muted);margin-top:2px;">tüm faturalar · kesilmiş toplam satış</div></div>'
+   +'</div>'
+   +'<div style="display:flex;height:12px;border-radius:7px;overflow:hidden;margin:16px 0 10px;background:var(--line);">'
+     +'<div style="width:'+_pct.toFixed(1)+'%;background:#28C76F;"></div><div style="width:'+(100-_pct).toFixed(1)+'%;background:var(--red);"></div>'
+   +'</div>'
+   +'<div style="display:flex;gap:26px;flex-wrap:wrap;">'
+     +'<div style="display:flex;align-items:center;gap:7px;"><span style="width:10px;height:10px;border-radius:3px;background:#28C76F;flex-shrink:0;"></span><span style="font-size:12px;color:var(--muted);font-weight:600;">Tahsil edilen</span><span class="mono" style="font-size:13px;font-weight:800;color:#1F8B4C;">'+money(_tahsil)+'</span></div>'
+     +'<div style="display:flex;align-items:center;gap:7px;"><span style="width:10px;height:10px;border-radius:3px;background:var(--red);flex-shrink:0;"></span><span style="font-size:12px;color:var(--muted);font-weight:600;">Kalan alacak</span><span class="mono" style="font-size:13px;font-weight:800;color:var(--red);">'+money(_kalan)+'</span></div>'
+   +'</div>'
+  +'</div>';
+  return ciroCard+k+strip+today
    +'<div style="margin-top:24px;" class="oz2">'+col("check","#E07B00","BEKLEYEN ÖDEME ONAYLARI",(o.bekleyenOnay?'<span style="margin-left:auto;font-size:11px;font-weight:800;background:rgba(255,159,67,.16);color:#E07B00;border-radius:20px;padding:2px 10px;letter-spacing:0;">'+o.bekleyenOnay+' yeni</span>':''),onayBox)+col("phone","#981224","BUGÜN ARANACAKLAR","",araBox)+'</div>'
    +'<div style="margin-top:4px;" class="oz2">'+trendBox+nakitBox+'</div>'
    +'<div style="margin-top:4px;" class="oz2">'+col("alert","#EA5455","GECİKEN ÖDEMELER","",gec)+col("wrench","#3B82F6","AÇIK SERVİS (SLA)","",serv)+'</div>';
