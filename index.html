@@ -1462,13 +1462,19 @@ function sheetOvl(){
   if(S.sheet==="kutuOdemeBekleyen"){
     const giderler=((S.data&&S.data.kutu&&S.data.kutu.giderler)||[]).filter(g=>g.odeme!=="Ödendi"&&g.odeme!=="Ödeme Yapıldı").slice().sort((a,b)=>a.zaman<b.zaman?1:-1);
     const tot=giderler.reduce((s,g)=>s+(g.tutar||0),0);
-    const rows=giderler.length?giderler.map(g=>{const eld=(g.sekil==="Elden");
+    const osel=S.kutuOdeSel||{}; const oselN=giderler.filter(g=>osel[g._row]).length; const oAll=giderler.length>0&&oselN===giderler.length;
+    const ocbx=on=>'<div style="width:20px;height:20px;border-radius:5px;border:2px solid '+(on?'#981224':'#cfd0d6')+';background:'+(on?'#981224':'#fff')+';display:flex;align-items:center;justify-content:center;flex-shrink:0;">'+(on?ic('check',12,'#fff'):'')+'</div>';
+    const oselTot=giderler.filter(g=>osel[g._row]).reduce((s,g)=>s+(g.tutar||0),0);
+    const obulk=oselN>0?'<div style="display:flex;align-items:center;gap:10px;background:#981224;border-radius:11px;padding:10px 14px;margin-bottom:11px;flex-wrap:wrap;"><span style="font-weight:800;font-size:13px;color:#fff;flex:1;min-width:120px;">'+oselN+' seçili · '+money(oselTot,"₺")+'</span><button class="btn" data-act="kutuOdeTopluOde" style="background:#28C76F;color:#fff;border:none;flex:0 0 auto;" '+(S.busy?'disabled':'')+'>'+ic("check",13,"#fff")+' Seçilenleri Ödendi İşaretle</button><span data-act="kutuOdeSelClear" style="cursor:pointer;text-decoration:underline;font-size:12px;color:#f3c9cf;flex:0 0 auto;">Temizle</span></div>':'';
+    const ohead=giderler.length?'<div class="sec" style="display:flex;align-items:center;gap:9px;margin-top:0;"><span data-act="kutuOdeSelAll" style="cursor:pointer;display:inline-flex;">'+ocbx(oAll)+'</span>TÜMÜNÜ SEÇ ('+giderler.length+')<span style="flex:1;"></span></div>':'';
+    const rows=giderler.length?giderler.map(g=>{const eld=(g.sekil==="Elden");const on=!!osel[g._row];
       const btn=eld
         ? '<button class="btn b-on" data-act="kutuEldenOde" data-row="'+g._row+'" '+(S.busy?'disabled':'')+'>'+ic("check",12,"#28C76F")+' Ödeme Yapıldı</button>'
         : '<button class="btn b-on" data-act="kutuOdeAc" data-row="'+g._row+'" '+(S.busy?'disabled':'')+'>'+ic("bank",12,"#3B82F6")+' Öde / Dekont</button>';
-      return '<div class="row" style="flex-wrap:wrap;"><div class="grow" style="min-width:150px;"><div style="font-weight:700;" class="nowrap">'+esc(g.kategori)+(g.alt?' · '+esc(g.alt):'')+'</div><div style="font-size:11px;color:var(--muted);">'+esc(g.zaman)+(g.aciklama?' · '+esc(g.aciklama):'')+'</div>'+kutuOdemeBilgi(g)+'</div><div class="mono" style="font-weight:800;color:#EA5455;">−'+money(g.tutar,"₺")+'</div>'+btn+'</div>';}).join(''):'<div class="empty">Ödeme bekleyen masraf yok 👍</div>';
+      return '<div class="row" style="flex-wrap:wrap;'+(on?'background:#fbf3f4;':'')+'"><span data-act="kutuOdeSel" data-row="'+g._row+'" style="cursor:pointer;display:inline-flex;align-items:center;flex-shrink:0;">'+ocbx(on)+'</span><div class="grow" style="min-width:140px;"><div style="font-weight:700;" class="nowrap">'+esc(g.kategori)+(g.alt?' · '+esc(g.alt):'')+'</div><div style="font-size:11px;color:var(--muted);">'+esc(g.zaman)+(g.aciklama?' · '+esc(g.aciklama):'')+'</div>'+kutuOdemeBilgi(g)+'</div><div class="mono" style="font-weight:800;color:#EA5455;">−'+money(g.tutar,"₺")+'</div>'+btn+'</div>';}).join(''):'<div class="empty">Ödeme bekleyen masraf yok 👍</div>';
     return '<div class="ovl"><div class="modal" data-stop="1"><div class="mh"><div class="t">Ödeme Bekleyen Masraflar</div><div data-act="sheetclose" style="cursor:pointer;">'+ic("x",20,"#999")+'</div></div>'
-     +'<div style="font-size:12px;color:var(--muted);margin-bottom:11px;">Toplam <b style="color:#E07B00;">'+money(tot,"₺")+'</b> · '+giderler.length+' kayıt · <b>kasadan düşmedi</b>. <span style="color:#3B82F6;">Hesaptan</span>→IBAN\'a gönder + dekont yükle · <span style="color:#28C76F;">Elden</span>→tek tıkla onayla. Ödeyince kasadan düşer.</div>'
+     +'<div style="font-size:12px;color:var(--muted);margin-bottom:11px;">Toplam <b style="color:#E07B00;">'+money(tot,"₺")+'</b> · '+giderler.length+' kayıt · <b>kasadan düşmedi</b>. Toplu seç → hepsini ödendi yap (Elden→Ödeme Yapıldı, Hesaptan→Ödendi). <b>Dekont</b> gerekiyorsa tek tek <span style="color:#3B82F6;">Öde / Dekont</span> kullan.</div>'
+     +obulk+ohead
      +'<div class="box">'+rows+'</div></div></div>';
   }
   if(S.sheet==="kutuOde"){
@@ -1911,7 +1917,11 @@ document.addEventListener("click",async e=>{
   if(a==="kutuHrkOnay"){const tip=el.getAttribute("data-tip"),row=el.getAttribute("data-row"),durum=el.getAttribute("data-durum");S.sheet=null;S.sheetData=null;act("kutuOnay",{tip:tip,row:row,durum:durum},"ERSA KUTU: "+durum);return;}
   if(a==="kutuCariAc"){S.sheet="kutuCari";S.sheetData={cari:el.getAttribute("data-cari")};render();return;}
   if(a==="kutuCariPdf"){kutuCariPdf(el.getAttribute("data-cari"));return;}
-  if(a==="kutuOdemeBekleyenAc"){S.sheet="kutuOdemeBekleyen";S.sheetData={};render();return;}
+  if(a==="kutuOdemeBekleyenAc"){S.kutuOdeSel={};S.sheet="kutuOdemeBekleyen";S.sheetData={};render();return;}
+  if(a==="kutuOdeSel"){const rw=el.getAttribute("data-row");S.kutuOdeSel=S.kutuOdeSel||{};if(S.kutuOdeSel[rw])delete S.kutuOdeSel[rw];else S.kutuOdeSel[rw]=true;render();return;}
+  if(a==="kutuOdeSelAll"){const gl=((S.data&&S.data.kutu&&S.data.kutu.giderler)||[]).filter(g=>g.odeme!=="Ödendi"&&g.odeme!=="Ödeme Yapıldı");const allOn=gl.length>0&&gl.every(g=>S.kutuOdeSel&&S.kutuOdeSel[g._row]);S.kutuOdeSel={};if(!allOn)gl.forEach(g=>{S.kutuOdeSel[g._row]=true;});render();return;}
+  if(a==="kutuOdeSelClear"){S.kutuOdeSel={};render();return;}
+  if(a==="kutuOdeTopluOde"){const gl=((S.data&&S.data.kutu&&S.data.kutu.giderler)||[]).filter(g=>g.odeme!=="Ödendi"&&g.odeme!=="Ödeme Yapıldı");const sel=S.kutuOdeSel||{};const rows=gl.filter(g=>sel[g._row]).map(g=>g._row);if(!rows.length){toast("Önce masraf seçin");return;}if(!confirm(rows.length+" masraf ÖDENDİ işaretlenecek ve kasadan düşecek. Emin misiniz?\n(Dekont eklenmez; gerekiyorsa tek tek 'Öde / Dekont' kullanın.)"))return;S.kutuOdeSel={};S.sheet=null;S.sheetData=null;S.busy=true;render();try{const res=await api("kutuGiderOdeToplu",{rows:rows});if(res&&res.ok){toast((res.count||rows.length)+" masraf ödendi ✓");const r=await api("data");if(r&&r.ok)S.data=r;}else toast((res&&res.error)||"İşlem başarısız");}catch(e){toast("Bağlantı hatası");}S.busy=false;render();return;}
   if(a==="kutuEldenOde"){if(!confirm("Bu elden ödeme yapıldı olarak işaretlensin mi? (kasadan düşer)"))return;S.sheet=null;S.sheetData=null;act("kutuGiderOdendi",{row:el.getAttribute("data-row")},"Elden ödeme yapıldı ✓");return;}
   if(a==="kutuOdeAc"){window.dekontFiles=[];S.sheet="kutuOde";S.sheetData={row:el.getAttribute("data-row")};render();return;}
   if(a==="kutuIbanKopya"){const ib=el.getAttribute("data-iban")||"";try{navigator.clipboard.writeText(ib);toast("IBAN kopyalandı ✓");}catch(e){toast(ib);}return;}
