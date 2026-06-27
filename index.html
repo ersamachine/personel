@@ -1428,19 +1428,25 @@ window.aiAutoLogo=function(btn){
     AIE.busy=false; if(btn){btn.disabled=false;btn.style.opacity="";btn.innerHTML=orig;}
   }).catch(function(){ AIE.busy=false; if(btn){btn.disabled=false;btn.style.opacity="";btn.innerHTML=orig;} toast("Bağlantı hatası"); });
 };
-/* AI sonrası: beyaz kenar boşluklarını otomatik kırpar → makine çerçeveye sığar (boyutuna göre kırpma) */
+/* AI sonrası: beyaz kenar boşluklarını otomatik kırpar → makine çerçeveye sığar.
+   Satır/sütun YOĞUNLUĞU bakar: tek tük soluk iz/gölge sayılmaz, sadece makinenin dolu olduğu alan bulunur. */
 function aiTrimWhite(){
   try{
     var c=AIE.cv, ctx=AIE.ctx, w=c.width, h=c.height; if(!w||!h) return false;
-    var d=ctx.getImageData(0,0,w,h).data, thr=244;
-    var minX=w,minY=h,maxX=0,maxY=0,found=false, st=Math.max(1,Math.floor(Math.min(w,h)/700));
-    for(var y=0;y<h;y+=st){ for(var x=0;x<w;x+=st){ var i=(y*w+x)*4; if(d[i+3]>12 && (d[i]<thr||d[i+1]<thr||d[i+2]<thr)){ if(x<minX)minX=x; if(x>maxX)maxX=x; if(y<minY)minY=y; if(y>maxY)maxY=y; found=true; } } }
-    if(!found) return false;
-    var px=Math.round(w*0.03), py=Math.round(h*0.03);
+    var d=ctx.getImageData(0,0,w,h).data, thr=232, st=2;
+    var rowC=new Int32Array(h), colC=new Int32Array(w);
+    for(var y=0;y<h;y+=st){ var base=y*w; for(var x=0;x<w;x+=st){ var i=(base+x)*4; if(d[i+3]>20 && (d[i]<thr||d[i+1]<thr||d[i+2]<thr)){ rowC[y]++; colC[x]++; } } }
+    var needR=Math.max(3, Math.round((w/st)*0.006));   // satır/sütun "dolu" sayılsın diye min ~%0.6 içerik
+    var needC=Math.max(3, Math.round((h/st)*0.006));
+    var minY=-1,maxY=-1,minX=-1,maxX=-1, k;
+    for(k=0;k<h;k++){ if(rowC[k]>=needR){ if(minY<0)minY=k; maxY=k; } }
+    for(k=0;k<w;k++){ if(colC[k]>=needC){ if(minX<0)minX=k; maxX=k; } }
+    if(minX<0||minY<0||maxX<=minX||maxY<=minY) return false;
+    var px=Math.round(w*0.035), py=Math.round(h*0.035);   // %3.5 düzgün boşluk bırak
     minX=Math.max(0,minX-px); minY=Math.max(0,minY-py); maxX=Math.min(w-1,maxX+px); maxY=Math.min(h-1,maxY+py);
     var nw=maxX-minX+1, nh=maxY-minY+1;
     if(nw<10||nh<10) return false;
-    if(nw>=w*0.96 && nh>=h*0.96) return false;   // zaten dolu, kırpma gereksiz
+    if(nw>=w*0.98 && nh>=h*0.98) return false;   // zaten çerçeveyi dolduruyor
     var tmp=document.createElement('canvas'); tmp.width=nw; tmp.height=nh; tmp.getContext('2d').drawImage(c,minX,minY,nw,nh,0,0,nw,nh);
     c.width=nw; c.height=nh; ctx.clearRect(0,0,nw,nh); ctx.drawImage(tmp,0,0);
     return true;
