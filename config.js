@@ -1,2 +1,2 @@
-// ERSA Personel Paneli
-window.API_URL = "https://script.google.com/macros/s/AKfycbxVGRFz6wx_sDcIuVYRGabdS3_7Ky8SeQKez9IfTd7vtsCzGcfn2ONAgtOi3XkqES9K/exec";
+// ERSA Personel Paneli — backend (Apps Script) adresi
+window.API_URL = "https://script.google.com/macros/s/AKfycby_HLxtsoerxFv61SpKOwYR-NFQ8PHjmitVFgUyfsGgTvZZixFzAQvfFOoMO8uLwWDB/exec";
