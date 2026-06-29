@@ -634,6 +634,11 @@ function printEkstre(tk){
       tkHtml='<div class="tkblock"><div class="sh">Açık Taksitler / Ödeme Planı</div><table class="tk"><thead><tr><th style="width:80px">Vade</th><th>Kalem</th><th>Durum</th><th class="r">Tutar</th></tr></thead><tbody>'+r+'</tbody></table></div>';
     }
   }
+  const cekAcik=(e.cekler||[]).filter(c=>["Tahsil Edildi","Ödendi","Karşılıksız","İade"].indexOf(String(c.durum||""))<0);
+  let cekHtml="";
+  if(cekAcik.length){ const cr=cekAcik.map(c=>'<tr><td class="tar">'+dd(c.vade)+'</td><td>Çek No: '+esc(c.cekNo||"—")+'</td><td><span class="pill">'+esc(String(c.durum||"Portföyde").toLocaleUpperCase("tr"))+'</span></td><td class="r bk">'+M(c.usd)+'</td></tr>').join("");
+    const cekTop=cekAcik.reduce((a,c)=>a+(Number(c.usd)||0),0);
+    cekHtml='<div class="tkblock"><div class="sh">Açık Çekler · Portföyde</div><table class="tk"><thead><tr><th style="width:80px">Vade</th><th>Çek</th><th>Durum</th><th class="r">Tutar</th></tr></thead><tbody>'+cr+'</tbody></table><div style="font-size:9.5px;color:#777;margin-top:5px;">Toplam açık çek: <b>'+M(cekTop)+'</b> · Vadesi gelmemiş çekler güncel bakiyeye dahil değildir; tahsil edildikçe işlenir.</div></div>'; }
   const ct=esc([e.email,e.tel].filter(Boolean).join(" · "));
   const doc='<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Cari Ekstre · '+esc(e.musteri)+'</title>'
    +'<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">'
@@ -648,7 +653,7 @@ function printEkstre(tk){
        +'<div class="sh">Hesap Hareketleri</div>'
        +'<table><thead><tr><th style="width:78px">Tarih</th><th>Açıklama</th><th class="r">Borç</th><th class="r">Alacak</th><th class="r">Bakiye</th></tr></thead><tbody>'+rows+'</tbody>'
        +'<tfoot><tr><td colspan="2">TOPLAM</td><td class="r borc">'+M(tFat)+'</td><td class="r alacak">'+M(tTah)+'</td><td class="r bk">'+M(tBak)+'</td></tr></tfoot></table>'
-       +tkHtml
+       +tkHtml+cekHtml
        +'<div class="note">Bu ekstre bilgilendirme amaçlıdır. Mutabakat için muhasebe departmanımızla iletişime geçiniz.</div>'
      +'</div>'
      +'<div class="botbar"><div>info@ersamachinery.com</div><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.4 12 4l9 7.4"/><path d="M5.5 9.8V20h13V9.8"/></svg><div>www.ersamachinery.com</div></div>'
