@@ -190,7 +190,20 @@ async function login(){
   catch(e){ S.busy=false;S.err="Bağlantı hatası.";renderLogin(); }
 }
 async function reload(){ S.loading=true;render(); try{const res=await api("data"); if(res&&res.ok)S.data=res;}catch(e){} S.loading=false;render(); }
-async function act(action,extra,okMsg){ if(S.busy)return; S.busy=true; try{ const res=await api(action,extra); if(res&&res.ok){ if(okMsg)toast(okMsg); const r=await api("data"); if(r&&r.ok)S.data=r; } else toast((res&&res.error)||"İşlem başarısız"); }catch(e){ toast("Bağlantı hatası"); } S.busy=false; render(); }
+async function act(action,extra,okMsg){
+  if(S.busy)return; S.busy=true; render();
+  try{
+    const res=await api(action,extra);              // 1) KAYIT — backend onayını bekle (muhasebe güvenliği)
+    if(res&&res.ok){
+      if(okMsg)toast(okMsg);                          //    onay geldi → "kaydedildi"
+      S.busy=false; render();                         // 2) ekranı HEMEN aç, kullanıcı beklemesin
+      api("data").then(r=>{ if(r&&r.ok){ S.data=r; render(); } })  // 3) listeyi arka planda tazele
+                 .catch(()=>{});
+      return;
+    } else { toast((res&&res.error)||"İşlem başarısız"); }
+  }catch(e){ toast("Bağlantı hatası"); }
+  S.busy=false; render();
+}
 function logout(){ try{if(S.tok)api("logout");}catch(e){} try{localStorage.removeItem("pp_kod");localStorage.removeItem("pp_sifre");localStorage.removeItem("pp_tok");}catch(e){} S.authed=false;S.data=null;S.kod="";S.sifre="";S.tok="";render(); }
 
 const TAKIP_DURUMLAR=["Arandı","Söz Verildi","Ödeme Bekleniyor","Çözüldü"];
