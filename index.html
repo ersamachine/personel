@@ -112,22 +112,41 @@ i.ic svg{display:block;}
   .bn{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:9px;color:var(--muted);font-weight:600;cursor:pointer;flex:0 0 auto;min-width:64px;padding:0 4px;}.bn.on{color:var(--red);}
   .row{flex-wrap:wrap;}
 }
-/* ============ V75 · VUEXY GÖRÜNÜM KATMANI (ERSA kırmızı) — yalnız görünüm, işlev değişmez ============ */
-:root{--r75:12px;}
-.topbar{position:sticky;top:12px;z-index:6;margin:12px 20px 2px;padding:11px 18px;background:var(--card);border:none;border-bottom:none;border-radius:var(--r75);box-shadow:var(--shadow);-webkit-backdrop-filter:none;backdrop-filter:none;}
-.view{padding:16px 20px 92px;max-width:1180px;}
-.box{border:none;border-radius:var(--r75);box-shadow:var(--shadow);}
-.kpi{border:none;border-radius:var(--r75);box-shadow:var(--shadow);padding:17px 20px;transition:transform .18s ease,box-shadow .18s ease;}
-.kpi:hover{transform:translateY(-4px);box-shadow:0 10px 26px -10px rgba(34,41,47,.3);}
-.kpi.alert{background:var(--card);}
-.ki{border-radius:10px;}
-.side{border-right:none;box-shadow:2px 0 18px rgba(34,41,47,.04);}
-.ni{border-radius:9px;font-weight:500;}
-.ni.on{box-shadow:0 3px 8px 0 rgba(152,18,36,.4);}
-.btn{border-radius:8px;font-weight:600;}
-.pill{border-radius:30px;}
-.field,.search,.sel,.tsearch,.fx,.iconbtn{border-radius:9px;}
-.row{padding:13px 18px;}
+/* ===== V76 · VUEXY ÖZET GÖRÜNÜMÜ ===== */
+.topbar{margin:14px 24px 0;border-radius:12px;box-shadow:var(--shadow);border-bottom:none;background:var(--card);backdrop-filter:none;}
+.ozg{display:grid;gap:18px;}
+.ozg.top{grid-template-columns:1.55fr 1fr 1fr;}
+.ozg.kpi4{grid-template-columns:repeat(4,1fr);margin-top:18px;}
+@media(max-width:1150px){.ozg.top{grid-template-columns:1fr;}.ozg.kpi4{grid-template-columns:1fr 1fr;}}
+.ozc{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:20px 22px;}
+.ozc .ct{font-size:15px;font-weight:800;color:var(--head);}
+.ozc .cs{font-size:12px;color:var(--muted);margin-top:2px;}
+.ozc .ico{width:42px;height:42px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ozc .big{font-size:24px;font-weight:800;color:var(--head);margin-top:12px;letter-spacing:-.5px;}
+.ozc .bd{font-size:12px;font-weight:700;color:#28C76F;margin-top:4px;}
+.ozc .bd.dn{color:#EA5455;}
+.ozhero{background:linear-gradient(118deg,#981224 0%,#b5162c 100%);color:#fff;border-radius:12px;padding:22px 24px;position:relative;overflow:hidden;box-shadow:0 6px 22px -6px rgba(152,18,36,.5);}
+.ozhero::after{content:"";position:absolute;right:-40px;top:-40px;width:190px;height:190px;border-radius:50%;background:rgba(255,255,255,.06);}
+.ozhero::before{content:"";position:absolute;right:40px;bottom:-60px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.05);}
+.ozhero .ht{font-size:17px;font-weight:800;}
+.ozhero .hs{font-size:12px;opacity:.85;margin:2px 0 16px;}
+.ozhero .hr{font-size:12px;opacity:.85;font-weight:600;margin-bottom:16px;}
+.ozhero .hr b{font-size:15px;}
+.ozhs{display:grid;grid-template-columns:1fr 1fr;gap:14px 10px;position:relative;z-index:1;}
+.ozhs .b{display:flex;align-items:center;gap:9px;}
+.ozhs .hic{width:38px;height:38px;border-radius:8px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ozhs .v{font-weight:800;font-size:15px;}
+.ozhs .l{font-size:10.5px;opacity:.82;}
+.ozsplit{height:8px;border-radius:6px;background:rgba(234,84,85,.14);overflow:hidden;margin-top:16px;}
+.ozsplit i{display:block;height:100%;background:#28C76F;}
+.ozleg{display:flex;gap:18px;margin-top:12px;font-size:12px;color:var(--muted);}
+.ozleg b{color:var(--head);}
+.ozdot{width:9px;height:9px;border-radius:3px;display:inline-block;margin-right:6px;vertical-align:middle;}
+.ozk{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:18px 20px;display:flex;align-items:center;gap:15px;transition:.2s;}
+.ozk:hover{transform:translateY(-3px);box-shadow:0 10px 26px -10px rgba(34,41,47,.28);}
+.ozk .ico{width:44px;height:44px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ozk .v{font-size:20px;font-weight:800;color:var(--head);letter-spacing:-.4px;}
+.ozk .l{font-size:12px;color:var(--muted);margin-top:1px;}
 </style></head>
 <body><div id="root"></div>
 <script src="config.js"></script>
@@ -347,19 +366,20 @@ function planView(){
 }
 function ozetView(){
   const d=S.data||{}, o=d.ozet||{};
-  // HERO KPI (4) — hepsi gerçek veri
-  const k='<div class="kpis">'
-   +kpic("Toplam Alacak",money(o.toplamAlacak),"tüm müşteriler","var(--muted)","wallet","#981224","var(--red-soft)")
-   +kpic("Geciken Ödeme",money(o.gecikenTutar),(o.gecikenAdet||0)+" müşteri · vadesi geçti","#EA5455","alert","#EA5455","rgba(234,84,85,.14)")
-   +kpic("Bugün Tahsilat",money(o.bugunTahsilat),"bugün gelen","var(--green-ink)","cash","#28C76F","rgba(40,199,111,.14)")
-   +kpic("Bugün Vadesi Gelen",money(o.bugunVadeTutar||0),(o.bugunVadeAdet||0)+" müşteri","var(--gold-ink)","cal","#981224","var(--red-soft)")
+  // V76 · Vuexy KPI kartları (ikon solda) — return'de 'k' olarak kullanılıyor
+  const _ozk=(icon,col,bg,v,l)=>'<div class="ozk"><div class="ico" style="background:'+bg+';">'+ic(icon,22,col)+'</div><div style="min-width:0;"><div class="v">'+v+'</div><div class="l">'+l+'</div></div></div>';
+  const k='<div class="ozg kpi4">'
+   +_ozk("wallet","#EA5455","rgba(234,84,85,.12)",money(o.toplamAlacak),"Toplam Alacak")
+   +_ozk("alert","#E07B00","rgba(255,159,67,.14)",money(o.gecikenTutar),"Geciken · "+(o.gecikenAdet||0)+" müşteri")
+   +_ozk("check","#0098ad","rgba(0,207,232,.14)",(o.bekleyenOnay||0),"Bekleyen Onay")
+   +_ozk("bank","#7367F0","rgba(115,103,240,.12)",money(o.cekToplam||0),"Yaklaşan Çek")
    +'</div>';
   // MINI ŞERİT (4)
   const mini=(t,v,sub,subc,icon,col,bg)=>'<div class="kpi" style="padding:12px 14px;align-items:center;gap:11px;"><div class="ki" style="width:34px;height:34px;border-radius:8px;background:'+bg+';display:flex;align-items:center;justify-content:center;flex-shrink:0;">'+ic(icon,17,col)+'</div><div style="min-width:0;"><div style="font-size:10.5px;color:var(--muted);font-weight:600;">'+t+'</div><div class="mono" style="font-size:16px;font-weight:800;color:var(--head);">'+v+(sub?' <span style="font-size:11px;color:'+(subc||"var(--muted)")+';font-weight:700;">'+sub+'</span>':'')+'</div></div></div>';
-  const strip='<div class="kpis" style="margin-top:14px;">'
-   +mini("Bekleyen Onay",(o.bekleyenOnay||0),"bildirim","var(--muted)","check","#E07B00","rgba(255,159,67,.16)")
+  const strip='<div class="kpis" style="margin-top:18px;">'
+   +mini("Bugün Tahsilat",money(o.bugunTahsilat),"bugün","var(--muted)","cash","#28C76F","rgba(40,199,111,.14)")
+   +mini("Bugün Vadesi",money(o.bugunVadeTutar||0),(o.bugunVadeAdet||0)+" müşteri","var(--muted)","cal","#981224","var(--red-soft)")
    +mini("Açık Servis",(o.acikServis||0),"","var(--muted)","wrench","#3B82F6","rgba(59,130,246,.14)")
-   +mini("Yaklaşan Çek",(o.yaklasanCek||0),money(o.cekToplam),"var(--muted)","bank","#3B82F6","rgba(59,130,246,.14)")
    +mini("Şube Onayı",(o.istBekleyen||0),"Ali'den","var(--muted)","doc","#7367F0","rgba(115,103,240,.14)")
    +'</div>';
   // BUGÜN VADESİ GELENLER (vurgulu)
@@ -384,23 +404,15 @@ function ozetView(){
   const gec=(d.gecikenler||[]).slice(0,5).map(g=>'<div class="row"><div class="grow"><div class="nm2 nowrap">'+esc(g.musteri)+'</div><div class="sub">'+(g.kaynak==="Bakiye"?"Bakiye · taksit dışı":"vade "+esc(g.vade))+'</div></div><div style="text-align:right;"><div class="mono nm2" style="color:#EA5455;">'+money(g.tutar)+'</div>'+(g.gun!=null?'<span class="pill p-r">'+g.gun+' gün</span>':'<span class="pill p-b">Bakiye</span>')+'</div></div>').join('')||'<div class="empty">Geciken ödeme yok.</div>';
   // Servis SLA
   const serv=(d.servisler||[]).filter(s=>s.durum!=="Çözüldü"&&s.durum!=="Reddedildi").slice(0,5).map(s=>{const dy=daysOpen(s.zaman||s.tarih);const sla=(dy!=null)?(dy>3?'<span class="pill p-r">SLA · '+dy+'g</span>':(dy>=2?'<span class="pill p-o">'+dy+'g</span>':'<span class="pill p-g">'+dy+'g</span>')):durumPill(s.durum);return '<div class="row"><div class="grow"><div class="nm2 nowrap">'+esc(s.musteri)+'</div><div class="sub nowrap">'+esc(s.makine)+' · '+esc(s.sorun)+'</div></div>'+sla+'</div>';}).join('')||'<div class="empty">Açık servis yok.</div>';
-  // TOPLAM CİRO (tam genişlik kart + tahsil edilen / kalan çubuğu)
-  const _ciro=o.ciro||0, _tahsil=o.tahsilEdilen||0; const _kalan=Math.max(0,_ciro-_tahsil); const _pct=_ciro>0?Math.max(0,Math.min(100,_tahsil/_ciro*100)):0;
-  const ciroCard='<div class="box" style="padding:18px 20px;margin-bottom:14px;border:1px solid var(--line);">'
-   +'<div style="display:flex;align-items:center;gap:14px;">'
-     +'<div style="width:46px;height:46px;border-radius:12px;background:var(--red-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0;">'+ic("cash",24,"#981224")+'</div>'
-     +'<div style="min-width:0;"><div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.6px;">TOPLAM CİRO</div>'
-       +'<div class="mono" style="font-size:29px;font-weight:800;color:var(--head);line-height:1.12;">'+money(_ciro)+'</div>'
-       +'<div style="font-size:11.5px;color:var(--muted);margin-top:2px;">tüm faturalar · kesilmiş toplam satış</div></div>'
-   +'</div>'
-   +'<div style="display:flex;height:12px;border-radius:7px;overflow:hidden;margin:16px 0 10px;background:var(--line);">'
-     +'<div style="width:'+_pct.toFixed(1)+'%;background:#28C76F;"></div><div style="width:'+(100-_pct).toFixed(1)+'%;background:var(--red);"></div>'
-   +'</div>'
-   +'<div style="display:flex;gap:26px;flex-wrap:wrap;">'
-     +'<div style="display:flex;align-items:center;gap:7px;"><span style="width:10px;height:10px;border-radius:3px;background:#28C76F;flex-shrink:0;"></span><span style="font-size:12px;color:var(--muted);font-weight:600;">Tahsil edilen</span><span class="mono" style="font-size:13px;font-weight:800;color:#1F8B4C;">'+money(_tahsil)+'</span></div>'
-     +'<div style="display:flex;align-items:center;gap:7px;"><span style="width:10px;height:10px;border-radius:3px;background:var(--red);flex-shrink:0;"></span><span style="font-size:12px;color:var(--muted);font-weight:600;">Kalan alacak</span><span class="mono" style="font-size:13px;font-weight:800;color:var(--red);">'+money(_kalan)+'</span></div>'
-   +'</div>'
-  +'</div>';
+  // V76 · Vuexy hero satırı (return'de 'ciroCard' olarak kullanılıyor)
+  const _ciro=o.ciro||0, _tahsil=o.tahsilEdilen||0; const _kalan=(o.toplamAlacak!=null?o.toplamAlacak:Math.max(0,_ciro-_tahsil)); const _pct=_ciro>0?Math.max(0,Math.min(100,_tahsil/_ciro*100)):0;
+  const _t=d.trend||{}; const _aylik=((_t.aylik)||[]).map(x=>+x[1]||0); const _buAy=_t.buAy||0,_gecenAy=_t.gecenAy||0,_ayPct=_gecenAy>0?Math.round((_buAy-_gecenAy)/_gecenAy*100):(_buAy>0?100:0);
+  const _area=(vals,col)=>{vals=(vals&&vals.length)?vals.slice():[0,0];if(vals.length<2)vals=[vals[0]||0,vals[0]||0];var w=260,h=64,mx=Math.max.apply(null,vals)||1,n=vals.length;var pts=vals.map((v,i)=>[i/(n-1)*w,(h-6)-((+v||0)/mx)*(h-14)]);var dd="M"+pts.map(p=>p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" L");return '<svg viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none" style="width:100%;height:64px;margin-top:14px;"><defs><linearGradient id="ozga" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+col+'" stop-opacity=".22"/><stop offset="1" stop-color="'+col+'" stop-opacity="0"/></linearGradient></defs><path d="'+dd+' L'+w+' '+h+' L0 '+h+' Z" fill="url(#ozga)"/><path d="'+dd+'" fill="none" stroke="'+col+'" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';};
+  const _hs=(icon,v,l)=>'<div class="b"><div class="hic">'+ic(icon,17,"#fff")+'</div><div style="min-width:0;"><div class="v">'+v+'</div><div class="l">'+l+'</div></div></div>';
+  const _hero='<div class="ozhero"><div class="ht">Tahsilat Analizi</div><div class="hs">%'+_pct.toFixed(0)+' tahsilat oranı · genel bakış</div><div class="hr">Toplam Ciro · <b>'+money(_ciro)+'</b></div><div class="ozhs">'+_hs("cash",money(_tahsil),"Tahsil Edilen")+_hs("chart",money(_kalan),"Kalan Alacak")+_hs("alert",money(o.gecikenTutar||0),"Geciken")+_hs("bank",money(o.cekToplam||0),"Çek Portföyü")+'</div></div>';
+  const _monthly='<div class="ozc"><div style="display:flex;justify-content:space-between;align-items:flex-start;"><div><div class="ct">Aylık Tahsilat</div><div class="cs">Bu ay toplam</div></div><div class="ico" style="background:rgba(40,199,111,.12);">'+ic("trend",22,"#28C76F")+'</div></div><div class="big">'+money(_buAy)+'</div><div class="bd'+(_ayPct<0?" dn":"")+'">'+(_ayPct>=0?"▲":"▼")+' %'+Math.abs(_ayPct)+' geçen aya göre</div>'+_area(_aylik,"#28C76F")+'</div>';
+  const _split='<div class="ozc"><div style="display:flex;justify-content:space-between;align-items:flex-start;"><div><div class="ct">Tahsilat Özeti</div><div class="cs">Tahsil vs Alacak</div></div><div class="ico" style="background:var(--red-soft);">'+ic("chart",22,"#981224")+'</div></div><div class="big">%'+_pct.toFixed(0)+'</div><div class="bd">▲ tahsilat oranı</div><div class="ozsplit"><i style="width:'+_pct.toFixed(0)+'%"></i></div><div class="ozleg"><div><span class="ozdot" style="background:#28C76F"></span><b>'+money(_tahsil)+'</b> Tahsil</div><div><span class="ozdot" style="background:rgba(234,84,85,.35)"></span><b>'+money(_kalan)+'</b> Alacak</div></div></div>';
+  const ciroCard='<div class="ozg top" style="margin-bottom:18px;">'+_hero+_monthly+_split+'</div>';
   return ciroCard+k+strip+today
    +'<div style="margin-top:24px;" class="oz2">'+col("check","#E07B00","BEKLEYEN ÖDEME ONAYLARI",(o.bekleyenOnay?'<span style="margin-left:auto;font-size:11px;font-weight:800;background:rgba(255,159,67,.16);color:#E07B00;border-radius:20px;padding:2px 10px;letter-spacing:0;">'+o.bekleyenOnay+' yeni</span>':''),onayBox)+col("phone","#981224","BUGÜN ARANACAKLAR","",araBox)+'</div>'
    +'<div style="margin-top:4px;" class="oz2">'+trendBox+nakitBox+'</div>'
